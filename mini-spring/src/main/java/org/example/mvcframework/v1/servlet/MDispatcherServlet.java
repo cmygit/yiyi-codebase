@@ -1,9 +1,6 @@
 package org.example.mvcframework.v1.servlet;
 
-import org.example.mvcframework.v1.annotation.MAutoWired;
-import org.example.mvcframework.v1.annotation.MController;
-import org.example.mvcframework.v1.annotation.MRequestMapping;
-import org.example.mvcframework.v1.annotation.MService;
+import org.example.mvcframework.v1.annotation.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -26,7 +24,7 @@ import java.util.*;
  * @Author: cmy
  * @Date: 2020/8/22 21:08
  */
-@WebServlet(name = "mmvc", urlPatterns = "/*",
+@WebServlet(name = "mini-mvc", urlPatterns = "/*",
         initParams = {@WebInitParam(name = "contextConfigLocation", value = "application.properties")},
         loadOnStartup = 1
 )
@@ -278,10 +276,47 @@ public class MDispatcherServlet extends HttpServlet {
             resp.getWriter().write("404 Not Found.");
             return;
         }
+        // 请求参数
+        Map<String, String[]> reqParams = req.getParameterMap();
 
-        Map<String, String[]> parameterMap = req.getParameterMap();
+        // 请求调用的方法
         Method method = this.handlerMapping.get(url);
+        // 方法形参的注解集合（二维数组，可能有多个参数，每个参数可能有多个注解）
+        Annotation[][] methodParamAnnotations = method.getParameterAnnotations();
+        // 方法形参类型集合
+        Class<?>[] methodParamTypes = method.getParameterTypes();
+        // 存放方法实参
+        Object[] methodParamValues = new Object[methodParamTypes.length];
+
+        // 按顺序遍历(保证参数传递的顺序性)，根据方法形参的类型，对方法参数赋值，存放到paramValues中
+        for (int i = 0; i < methodParamTypes.length; i++) {
+            Class<?> parameterType = methodParamTypes[i];
+            if (parameterType == HttpServletRequest.class) {
+                methodParamValues[i] = req;
+            } else if (parameterType == HttpServletResponse.class) {
+                methodParamValues[i] = resp;
+            } else if (parameterType == String.class) {
+                for (Annotation annotation : methodParamAnnotations[i]) {
+                    if (!(annotation instanceof MRequestParam)) {
+                        continue;
+                    }
+
+                    String paramName = ((MRequestParam) annotation).value();
+
+                    String value = Arrays.toString(reqParams.get(paramName))
+                                         .replaceAll("[\\[\\]]", "")
+                                         .replaceAll("\\s+", "");
+                    // 保存请求参数值
+                    methodParamValues[i] = value;
+                }
+
+            } else {
+                methodParamValues[i] = null;
+            }
+        }
+
         String beanName = this.toLowerFirstCase(method.getDeclaringClass().getSimpleName());
-        method.invoke(this.ioc.get(beanName), req, resp, parameterMap.get("name")[0], parameterMap.get("id")[0], parameterMap.get("addr")[0]);
+        // 调用方法
+        method.invoke(this.ioc.get(beanName), methodParamValues);
     }
 }
