@@ -1,4 +1,4 @@
-package org.example.v1.servlet;
+package org.example.mvcframework.v1.servlet;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * @Title:
@@ -21,12 +23,15 @@ import java.util.Map;
 })
 public class MDispatcherServlet extends HttpServlet {
 
-    private Map<String ,Object> ioc = new HashMap<>();
+    private Map<String, Object> ioc = new HashMap<>();
+
+    private Properties contextConfig = new Properties();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         // 1、读取配置文件
-        doLoadConfig();
+        String contextConfigLocation = config.getInitParameter("contextConfigLocation");
+        doLoadConfig(contextConfigLocation);
 
         // 2、扫描相关的类
         doScanner();
@@ -43,8 +48,21 @@ public class MDispatcherServlet extends HttpServlet {
         System.out.println("Mini Spring Framework is initialized.");
     }
 
-    private void doLoadConfig() {
-
+    /**
+     * 读取配置文件
+     *
+     * @param contextConfigLocation 配置文件名
+     */
+    private void doLoadConfig(String contextConfigLocation) {
+        // 到classPath中找到配置文件，装换为文件流
+        try (InputStream inputStream = this.getClass()
+                                           .getClassLoader()
+                                           .getResourceAsStream(contextConfigLocation)) {
+            // 加载配置文件
+            this.contextConfig.load(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void doScanner() {
@@ -76,8 +94,8 @@ public class MDispatcherServlet extends HttpServlet {
     /**
      * 调用具体的方法
      *
-     * @param req
-     * @param resp
+     * @param req request
+     * @param resp response
      */
     private void doDispatch(HttpServletRequest req, HttpServletResponse resp) {
 

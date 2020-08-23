@@ -1,4 +1,4 @@
-package org.example.v1.annotation;
+package org.example.mvcframework.v1.annotation;
 
 import java.lang.annotation.*;
 
@@ -7,10 +7,10 @@ import java.lang.annotation.*;
  * @Author: cmy
  * @Date: 2020/8/23 15:15
  */
-@Target({ElementType.PARAMETER})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface MRequestParam {
+public @interface MController {
 
     String value() default "";
 }
