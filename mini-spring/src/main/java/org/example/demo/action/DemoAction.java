@@ -1,10 +1,10 @@
 package org.example.demo.action;
 
 import org.example.demo.service.IDemoService;
-import org.example.mvcframework.v1.annotation.MAutoWired;
-import org.example.mvcframework.v1.annotation.MController;
-import org.example.mvcframework.v1.annotation.MRequestMapping;
-import org.example.mvcframework.v1.annotation.MRequestParam;
+import org.example.spring.framework.annotation.MAutoWired;
+import org.example.spring.framework.annotation.MController;
+import org.example.spring.framework.annotation.MRequestMapping;
+import org.example.spring.framework.annotation.MRequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

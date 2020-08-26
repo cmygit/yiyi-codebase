@@ -1,4 +1,4 @@
-package org.example.mvcframework.v1.annotation;
+package org.example.spring.framework.annotation;
 
 import java.lang.annotation.*;
 
@@ -7,10 +7,10 @@ import java.lang.annotation.*;
  * @Author: cmy
  * @Date: 2020/8/23 15:15
  */
-@Target({ElementType.FIELD})
+@Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface MAutoWired {
+public @interface MRequestParam {
 
     String value() default "";
 }

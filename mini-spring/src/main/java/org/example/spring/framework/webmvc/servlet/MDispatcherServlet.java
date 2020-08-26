@@ -1,6 +1,6 @@
-package org.example.mvcframework.v1.servlet;
+package org.example.spring.framework.webmvc.servlet;
 
-import org.example.mvcframework.v1.annotation.*;
+import org.example.spring.framework.annotation.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

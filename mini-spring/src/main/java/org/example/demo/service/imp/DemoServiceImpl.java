@@ -1,7 +1,7 @@
 package org.example.demo.service.imp;
 
 import org.example.demo.service.IDemoService;
-import org.example.mvcframework.v1.annotation.MService;
+import org.example.spring.framework.annotation.MService;
 
 /**
  * @Title:
