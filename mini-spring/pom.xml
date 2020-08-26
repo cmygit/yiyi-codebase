@@ -35,10 +35,10 @@
                 <version>9.4.31.v20200723</version>
                 <configuration>
                     <httpConnector>
-                        <port>8081</port>
+                        <port>8088</port>
                     </httpConnector>
                     <webApp>
-                        <contextPath>/mini-spring</contextPath>
+                        <contextPath>/spring</contextPath>
                     </webApp>
                 </configuration>
             </plugin>
