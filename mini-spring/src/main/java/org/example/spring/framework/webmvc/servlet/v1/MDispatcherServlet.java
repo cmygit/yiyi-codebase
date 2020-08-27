@@ -1,11 +1,9 @@
-package org.example.spring.framework.webmvc.servlet;
+package org.example.spring.framework.webmvc.servlet.v1;
 
 import org.example.spring.framework.annotation.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebInitParam;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,10 +22,10 @@ import java.util.*;
  * @Author: cmy
  * @Date: 2020/8/22 21:08
  */
-@WebServlet(name = "mini-mvc", urlPatterns = "/*",
-        initParams = {@WebInitParam(name = "contextConfigLocation", value = "application.properties")},
-        loadOnStartup = 1
-)
+// @WebServlet(name = "mini-mvc1", urlPatterns = "/*",
+//         initParams = {@WebInitParam(name = "contextConfigLocation", value = "application.properties")},
+//         loadOnStartup = 1
+// )
 public class MDispatcherServlet extends HttpServlet {
 
     private Properties contextConfig = new Properties();
