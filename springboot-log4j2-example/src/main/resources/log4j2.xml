@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--Configuration后面的status，这个用于设置log4j2自身内部的信息输出-->
+<!--monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数-->
+<configuration stats="warn" monitorInterval="30">
+    <!--日志级别以及优先级排序: OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+
+    <!--变量配置-->
+    <properties>
+        <!--%d{yyyy-MM-dd HH:mm:ss, SSS} : 日志生产时间,输出到毫秒的时间-->
+        <!--%5p : 输出日志级别，5表示右对齐并且固定输出5个字符，如果不足在左边补空格-->
+        <!--%t : 输出当前线程名称 %15.15t-->
+        <!--%m : 日志内容，即 logger.info("message")-->
+        <!--%n : 换行符-->
+        <!--%c : 输出日志的类名，%-40.40c{1.}表示左对齐并且固定输出40个字符，超出长度保留最后40个字符。{1.}表示精度，类限定名前面的部分每个部分只输出1个字符-->
+        <!--%L : 行号-->
+        <!--%M : 方法名-->
+        <!--%l : 输出语句所在的行数, 包括类名、方法名、文件名、行数-->
+        <!--hostName : 本地机器名-->
+        <!--hostAddress : 本地ip地址-->
+        <!--%xwEx : 异常转换信息-->
+        <property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${sys:PID} --- [%15.15t] %40.40c{1.}(%4L) : %m%n%xwEx</property>
+        <property name="CHARSET">UTF-8</property>
+        <!-- 定义日志存储的路径 -->
+        <property name="FILE_PATH" value="logs" />
+        <property name="FILE_NAME" value="demo" />
+    </properties>
+
+    <!-- 输出源 -->
+    <appenders>
+        <!-- 控制台输出 -->
+        <console name="console" target="SYSTEM_OUT" follow="true">
+            <patternLayout charset="${CHARSET}" pattern="${LOG_PATTERN}" />
+        </console>
+
+        <!-- 文件输出 -->
+        <!-- 这个会打印出所有的info及以上级别的信息，每次大小超过size，则这size大小的日志会自动存入按 年-月-日 建立的文件夹下面并进行压缩，作为存档-->
+        <rollingRandomAccessFile name="rollingInfoFile" fileName="${FILE_PATH}/info.log" filePattern="${FILE_PATH}/info/${FILE_NAME}-info-%d{yyyy-MM-dd}_%i.log.gz">
+            <!--只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <!--interval属性用来指定多久滚动一次，默认是1 hour-->
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <!-- DefaultRolloverStrategy属性如不设置，则默认为最多同一文件夹下7个文件开始覆盖-->
+            <DefaultRolloverStrategy max="100"/>
+        </rollingRandomAccessFile>
+    </appenders>
+
+    <!--loggers节点用来单独指定日志的形式，比如要为指定包下的class指定不同的日志级别等。-->
+    <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <loggers>
+
+        <!--若是additivity设为false，则 该logger的日志 只会在自己的appender里输出，而不会在 root节点 的appender里输出。-->
+        <logger name="org.example" level="debug" additivity="false">
+            <appenderRef ref="rollingInfoFile"/>
+            <appenderRef ref="console"/>
+        </logger>
+
+        <!--root节点用来指定项目的根日志，如果没有单独指定logger，那么就会默认使用该root日志输出-->
+        <root level="info">
+            <appenderRef ref="console"/>
+        </root>
+    </loggers>
+</configuration>
