@@ -1,4 +1,4 @@
-package org.example.demo.service.imp;
+package org.example.demo.service.impl;
 
 import org.example.demo.service.IDemoService;
 import org.example.spring.framework.annotation.MService;

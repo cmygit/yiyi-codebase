@@ -145,4 +145,8 @@ public class MApplicationContext {
     public Set<String> getDefinitionNames() {
         return this.beanDefinitionMap.keySet();
     }
+
+    public Properties getConfig() {
+        return this.reader.getConfig();
+    }
 }

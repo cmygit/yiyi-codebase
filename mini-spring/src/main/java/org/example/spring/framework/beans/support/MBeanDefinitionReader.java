@@ -118,4 +118,8 @@ public class MBeanDefinitionReader {
             this.registryBeanClasses.add(className);
         }
     }
+
+    public Properties getConfig() {
+        return this.contextConfig;
+    }
 }
