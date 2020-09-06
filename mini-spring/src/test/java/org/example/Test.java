@@ -1,18 +1,20 @@
 package org.example;
 
-import java.util.Arrays;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Title:
  * @Author: cmy
  * @Date: 2020/8/23 20:35
  */
+@Slf4j
 public class Test {
 
     public static void main(String[] args) {
-        String[] arr = new String[]{"1", "2", "3"};
-        String result = Arrays.toString(arr);
-        result = result.replaceAll("[\\[\\]]", "").replaceAll("\\s", "");
-        System.out.println(result);
+        log.trace("hello world");
+        log.debug("hello world");
+        log.info("hello world");
+        log.warn("hello world");
+        log.error("hello world");
     }
 }

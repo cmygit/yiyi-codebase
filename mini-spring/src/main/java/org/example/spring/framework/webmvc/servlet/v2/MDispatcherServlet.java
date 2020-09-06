@@ -1,5 +1,6 @@
 package org.example.spring.framework.webmvc.servlet.v2;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.spring.framework.annotation.MController;
 import org.example.spring.framework.annotation.MRequestMapping;
 import org.example.spring.framework.context.MApplicationContext;
@@ -28,6 +29,7 @@ import java.util.regex.Pattern;
         initParams = {@WebInitParam(name = "contextConfigLocation", value = "application.properties")},
         loadOnStartup = 1
 )
+@Slf4j
 public class MDispatcherServlet extends HttpServlet {
 
     private MApplicationContext context;
@@ -47,7 +49,7 @@ public class MDispatcherServlet extends HttpServlet {
         // 初始化HandlerMapping
         this.initStrategies(this.context);
 
-        System.out.println("Mini Spring Framework is initialized.");
+        log.info("Mini Spring Framework is initialized.");
     }
 
     private void initStrategies(MApplicationContext context) {
@@ -118,7 +120,7 @@ public class MDispatcherServlet extends HttpServlet {
                 Pattern pattern = Pattern.compile(regex);
 
                 this.handlerMappings.add(new MHandlerMapping(pattern, method, instance));
-                System.out.println("Mapped: " + regex + "," + method);
+                log.info("Mapped: " + regex + "," + method);
             }
         }
     }
