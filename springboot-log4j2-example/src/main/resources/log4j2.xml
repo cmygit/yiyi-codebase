@@ -18,6 +18,7 @@
         <property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- [%10.10t] %40.40c{1.}(%4L) : %m%n</property>
         <property name="CHARSET">UTF-8</property>
         <!-- 定义日志存储的路径 -->
+        <!-- 注意，maven多模块项目，当运行子模块main方法时，日志文件夹会生成在父模块所在的根目录下，当运行子模块的单元测试时，日志文件夹会生成在当前模块所在的根目录下。 -->
         <property name="LOG_PATH" value="logs" />
         <property name="LOG_NAME" value="demo" />
         <!-- 归档间隔 -->
