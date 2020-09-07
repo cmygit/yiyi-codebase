@@ -3,6 +3,9 @@ package org.example.spring.framework.context;
 import org.example.spring.framework.annotation.MAutoWired;
 import org.example.spring.framework.annotation.MController;
 import org.example.spring.framework.annotation.MService;
+import org.example.spring.framework.aop.MJDKDynamicAopProxy;
+import org.example.spring.framework.aop.config.MAopConfig;
+import org.example.spring.framework.aop.support.MAdvisedSupport;
 import org.example.spring.framework.beans.MBeanWrapper;
 import org.example.spring.framework.beans.config.MBeanDefinition;
 import org.example.spring.framework.beans.support.MBeanDefinitionReader;
@@ -125,13 +128,33 @@ public class MApplicationContext {
             Class<?> clazz = Class.forName(className);
             instance = clazz.newInstance();
 
-            // TODO: AOP 生成代理对象
+            // AOP 生成代理对象
+            MAdvisedSupport aopConfig = this.instantiateAopConfig(beanDefinition);
+            aopConfig.setTargetClass(clazz);
+            aopConfig.setTarget(instance);
+
+            if (aopConfig.pointCutMatch()) {
+                instance = new MJDKDynamicAopProxy(aopConfig).getProxy();
+            }
 
             this.factoryBeanObjectCache.put(beanName, instance);
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
         return instance;
+    }
+
+    private MAdvisedSupport instantiateAopConfig(MBeanDefinition beanDefinition) {
+        MAopConfig config = new MAopConfig();
+        Properties properties = this.reader.getConfig();
+        config.setPointCut(properties.getProperty("pointCut"));
+        config.setAspectClass(properties.getProperty("aspectClass"));
+        config.setAspectBefore(properties.getProperty("aspectBefore"));
+        config.setAspectAfter(properties.getProperty("aspectAfter"));
+        config.setAspectAfterThrow(properties.getProperty("aspectAfterThrow"));
+        config.setAspectAfterThrowingName(properties.getProperty("aspectAfterThrowingName"));
+
+        return new MAdvisedSupport(config);
     }
 
     public Object getBean(Class clazz) {
