@@ -1,0 +1,7 @@
+### auth
+GET http://{{host}}/auth/hello
+Accept: application/json
+
+### business
+GET http://{{host}}/business/hello
+Accept: application/json
