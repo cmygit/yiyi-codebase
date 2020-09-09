@@ -15,7 +15,7 @@
         <!-- %L : 输出日志处的所在行号 -->
         <!-- %M : 方法名 -->
         <!-- %l : 输出语句所在的行数, 包括类名、方法名、文件名、行数 -->
-        <property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- [%10.10t] %40.40c{1.}(%4L) : %m%n</property>
+        <property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- [%10.10t] [%4L] %40.40c{1.} : %m%n</property>
         <property name="CHARSET">UTF-8</property>
         <!-- 定义日志存储的路径 -->
         <!-- 注意，maven多模块项目，当运行子模块main方法时，日志文件夹会生成在父模块所在的根目录下，当运行子模块的单元测试时，日志文件夹会生成在当前模块所在的根目录下。 -->
