@@ -2,6 +2,7 @@ package org.example.factory.simplefactory.pizzastore.order;
 
 import org.example.factory.simplefactory.pizzastore.pizza.CheesePizza;
 import org.example.factory.simplefactory.pizzastore.pizza.GreekPizza;
+import org.example.factory.simplefactory.pizzastore.pizza.PepperPizza;
 import org.example.factory.simplefactory.pizzastore.pizza.Pizza;
 
 import java.io.BufferedReader;
@@ -27,6 +28,8 @@ public class OrderPizza {
                 pizza = new GreekPizza();
             } else if ("cheese".equals(orderType)) {
                 pizza = new CheesePizza();
+            } else if ("pepper".equals(orderType)) {
+                pizza = new PepperPizza();
             } else {
                 break;
             }
