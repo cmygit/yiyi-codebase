@@ -1,8 +1,5 @@
 package org.example.factory.simplefactory.pizzastore.order;
 
-import org.example.factory.simplefactory.pizzastore.pizza.CheesePizza;
-import org.example.factory.simplefactory.pizzastore.pizza.GreekPizza;
-import org.example.factory.simplefactory.pizzastore.pizza.PepperPizza;
 import org.example.factory.simplefactory.pizzastore.pizza.Pizza;
 
 import java.io.BufferedReader;
@@ -16,30 +13,32 @@ import java.io.InputStreamReader;
  */
 public class OrderPizza {
 
-    public OrderPizza() {
-        Pizza pizza = null;
-        // 订购披萨的类型
+    private SimpleFactory simpleFactory;
+
+    private Pizza pizza;
+
+    public OrderPizza(SimpleFactory simpleFactory) {
+        this.setFactory(simpleFactory);
+    }
+
+    public void setFactory(SimpleFactory simpleFactory) {
         String orderType = "";
+        this.simpleFactory = simpleFactory;
 
         do {
             orderType = this.getType();
+            pizza = this.simpleFactory.createPizza(orderType);
 
-            if ("greek".equals(orderType)) {
-                pizza = new GreekPizza();
-            } else if ("cheese".equals(orderType)) {
-                pizza = new CheesePizza();
-            } else if ("pepper".equals(orderType)) {
-                pizza = new PepperPizza();
+            // 制作披萨
+            if (pizza != null) {
+                pizza.prepare();
+                pizza.bake();
+                pizza.cut();
+                pizza.box();
             } else {
+                System.out.println(" 订购披萨失败 ");
                 break;
             }
-
-            // 输出 pizza 制作过程
-            pizza.setName(orderType);
-            pizza.prepare();
-            pizza.bake();
-            pizza.cut();
-            pizza.box();
         } while (true);
     }
 
