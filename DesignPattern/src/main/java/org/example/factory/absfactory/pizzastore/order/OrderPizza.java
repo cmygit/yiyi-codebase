@@ -1,8 +1,6 @@
-package org.example.factory.factorymethod.pizzastore.order;
+package org.example.factory.absfactory.pizzastore.order;
 
-
-
-import org.example.factory.factorymethod.pizzastore.pizza.Pizza;
+import org.example.factory.absfactory.pizzastore.pizza.Pizza;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,18 +9,24 @@ import java.io.InputStreamReader;
 /**
  * @Title:
  * @Author: cmy
- * @Date: 2020/9/23 20:41
+ * @Date: 2020/9/24 21:40
  */
-public abstract class OrderPizza {
+public class OrderPizza {
 
-    public OrderPizza() {
+    AbsFactory factory;
+
+    public OrderPizza(AbsFactory factory) {
+        this.setFactory(factory);
+    }
+
+    private void setFactory(AbsFactory factory) {
         Pizza pizza = null;
-        String orderType;
+        String orderType = "";
+        this.factory = factory;
 
         do {
             orderType = this.getType();
-            // 抽象方法，由工厂子类实现
-            pizza = this.createPizza(orderType);
+            pizza = this.factory.createPizza(orderType);
 
             // 制作披萨
             if (pizza != null) {
@@ -36,14 +40,6 @@ public abstract class OrderPizza {
             }
         } while (true);
     }
-
-    /**
-     * 定义一个抽象方法， createPizza ，让各个工厂子类自己实现
-     *
-     * @param orderType
-     * @return
-     */
-    public abstract Pizza createPizza(String orderType);
 
     /**
      * 获取客户希望订购的披萨种类
