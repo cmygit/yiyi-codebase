@@ -15,6 +15,8 @@ public class Sheep implements Cloneable {
 
     private String address = "蒙古";
 
+    public Sheep friend;
+
     public Sheep(String name, int age, String color) {
         this.name = name;
         this.age = age;
