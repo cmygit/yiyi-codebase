@@ -21,5 +21,8 @@ public class Client {
         System.out.println("-------------------");
         Action fail = new Fail();
         objectStructure.display(fail);
+        System.out.println("-------------------");
+        Action wait = new Wait();
+        objectStructure.display(wait);
     }
 }
