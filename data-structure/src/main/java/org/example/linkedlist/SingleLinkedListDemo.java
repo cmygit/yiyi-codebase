@@ -9,12 +9,24 @@ public class SingleLinkedListDemo {
 
     public static void main(String[] args) {
         HeroNode node1 = new HeroNode(1, "1", "11");
-        HeroNode node2 = new HeroNode(2, "22", "22");
-        HeroNode node3 = new HeroNode(3, "33", "33");
+        HeroNode node2 = new HeroNode(2, "2", "22");
+        HeroNode node3 = new HeroNode(3, "3", "33");
+        HeroNode node4 = new HeroNode(4, "4", "44");
+        HeroNode node5 = new HeroNode(5, "5", "55");
         SingleLinkedList list = new SingleLinkedList();
-        list.add(node1);
-        list.add(node2);
-        list.add(node3);
+        // list.add(node1);
+        // list.add(node2);
+        // list.add(node3);
+        // list.add(node4);
+        // list.add(node5);
+
+        list.addByOrder(node4);
+        list.addByOrder(node2);
+        list.addByOrder(node1);
+        list.addByOrder(node5);
+        list.addByOrder(node3);
+        list.addByOrder(node2);
+        list.addByOrder(node4);
 
         list.list();
     }
@@ -22,7 +34,7 @@ public class SingleLinkedListDemo {
 
 class SingleLinkedList {
 
-    private HeroNode head = new HeroNode(0, "", "");
+    private final HeroNode head = new HeroNode(0, "", "");
 
     public void add(HeroNode heroNode) {
         HeroNode temp = this.head;
@@ -36,6 +48,41 @@ class SingleLinkedList {
         }
 
         temp.next = heroNode;
+    }
+
+    public void addByOrder(HeroNode heroNode) {
+        // 辅助变量 temp，指向要添加的位置的前一个的节点
+        HeroNode temp = this.head;
+        boolean isExist = false;
+
+        while (true) {
+            // 判断是否到链表末尾
+            if (temp.next == null) {
+                break;
+            }
+
+            // 判断是否找到了目标位置
+            if (temp.next.no > heroNode.no) {
+                break;
+            }
+            // 判断目标位置已存在元素
+            else if (temp.next.no == heroNode.no) {
+                isExist = true;
+                break;
+            }
+
+            // 遍历下一个节点
+            temp = temp.next;
+        }
+
+        if (isExist) {
+            System.out.printf("编号 %d 已存在元素，不能继续添加\n", heroNode.no);
+        }
+        // 插入链表
+        else {
+            heroNode.next = temp.next;
+            temp.next = heroNode;
+        }
     }
 
     public void list() {
@@ -75,10 +122,10 @@ class HeroNode {
 
     @Override
     public String toString() {
-        int nextNo = -1;
+        String nextNo = "null";
 
         if (this.next != null) {
-            nextNo = this.next.no;
+            nextNo = String.valueOf(this.next.no);
         }
 
         return "HeroNode{" +
