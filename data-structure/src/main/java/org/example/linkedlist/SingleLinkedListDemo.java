@@ -59,6 +59,40 @@ public class SingleLinkedListDemo {
 
         list.list();
         System.out.println();
+
+        // 链表反转
+        System.out.println("链表反转");
+        reverseList(list.getHead());
+        list.list();
+        System.out.println();
+    }
+
+    public static void reverseList(HeroNode head) {
+        // 若链表为空或只有一个节点，则直接返回
+        if (head.next == null || head.next.next == null) {
+            return;
+        }
+
+        // 指向当前节点
+        HeroNode cur = head.next;
+        // 指向当前节点的下一个节点
+        HeroNode next;
+        // 反转的链表的头节点
+        HeroNode reverseHead = new HeroNode(0, "", "");
+
+        // 遍历原来的链表，每遍历一个节点，将其加入到反转链表的最前端
+        while (cur != null) {
+            next = cur.next;
+            // 将当前节点的下一个节点指向反转链表的第一个节点（不包括头节点）
+            cur.next = reverseHead.next;
+            // 将头节点指向新的第一个节点
+            reverseHead.next = cur;
+            // 继续遍历下一个节点
+            cur = next;
+        }
+
+        // 将 head.next 指向 reverseHead.next，实现单链表的反转
+        head.next = reverseHead.next;
     }
 
     /**
