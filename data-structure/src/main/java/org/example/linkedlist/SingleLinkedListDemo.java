@@ -43,6 +43,14 @@ public class SingleLinkedListDemo {
         list.list();
         System.out.println();
 
+        // 查找单链表中的倒数第 k 个节点
+        System.out.println("倒数第 4 个节点:" + findLastIndexNode(list.getHead(), 4));
+        System.out.println();
+
+        // 求链表长度
+        System.out.println("链表长度:" + getLength(list.getHead()));
+        System.out.println();
+
         // 删除节点
         list.delete(0);
         list.delete(6);
@@ -52,11 +60,66 @@ public class SingleLinkedListDemo {
         list.list();
         System.out.println();
     }
+
+    /**
+     * 查找单链表中的倒数第 k 个节点
+     * 1.求链表长度 length
+     * 2.遍历链表，遍历次数为 length - index，指向的节点即为所求节点
+     *
+     * @param head  链表的头节点
+     * @param index k
+     * @return 目标节点
+     */
+    public static HeroNode findLastIndexNode(HeroNode head, int index) {
+        if (head.next == null) {
+            return null;
+        }
+
+        int length = getLength(head);
+
+        if (index <= 0 || index > length) {
+            return null;
+        }
+
+        HeroNode cur = head.next;
+
+        for (int i = 0; i < length - index; i++) {
+            cur = cur.next;
+        }
+
+        return cur;
+    }
+
+    /**
+     * 返回链表的元素个数
+     *
+     * @param head 链表的头节点
+     * @return 链表的元素个数
+     */
+    public static int getLength(HeroNode head) {
+        if (head.next == null) {
+            return 0;
+        }
+
+        int length = 0;
+        HeroNode cur = head.next;
+
+        while (cur != null) {
+            length++;
+            cur = cur.next;
+        }
+
+        return length;
+    }
 }
 
 class SingleLinkedList {
 
     private final HeroNode head = new HeroNode(0, "", "");
+
+    public HeroNode getHead() {
+        return head;
+    }
 
     public void add(HeroNode heroNode) {
         HeroNode temp = this.head;
