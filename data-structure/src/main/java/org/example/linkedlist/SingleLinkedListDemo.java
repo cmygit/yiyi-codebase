@@ -14,12 +14,15 @@ public class SingleLinkedListDemo {
         HeroNode node4 = new HeroNode(4, "4", "44");
         HeroNode node5 = new HeroNode(5, "5", "55");
         SingleLinkedList list = new SingleLinkedList();
+
+        // 添加节点
         // list.add(node1);
         // list.add(node2);
         // list.add(node3);
         // list.add(node4);
         // list.add(node5);
 
+        // 按顺序添加节点
         list.addByOrder(node4);
         list.addByOrder(node2);
         list.addByOrder(node1);
@@ -27,6 +30,14 @@ public class SingleLinkedListDemo {
         list.addByOrder(node3);
         list.addByOrder(node2);
         list.addByOrder(node4);
+
+        list.list();
+
+        // 修改节点
+        HeroNode newHeroNode1 = new HeroNode(2, "233", "233~~");
+        HeroNode newHeroNode2 = new HeroNode(7, "233", "233~~");
+        list.update(newHeroNode1);
+        list.update(newHeroNode2);
 
         list.list();
     }
@@ -82,6 +93,37 @@ class SingleLinkedList {
         else {
             heroNode.next = temp.next;
             temp.next = heroNode;
+        }
+    }
+
+    public void update(HeroNode newHeroNode) {
+        if (this.head.next == null) {
+            System.out.println("链表为空");
+            return;
+        }
+
+        HeroNode temp = this.head;
+        boolean isExist = false;
+
+        while (true) {
+            // 判断是否到链表末尾
+            if (temp == null) {
+                break;
+            }
+
+            if (temp.no == newHeroNode.no) {
+                isExist = true;
+                break;
+            }
+
+            temp = temp.next;
+        }
+
+        if (isExist) {
+            temp.name = newHeroNode.name;
+            temp.nickName = newHeroNode.nickName;
+        } else {
+            System.out.printf("不存在编号为 %d 的节点\n", newHeroNode.no);
         }
     }
 
