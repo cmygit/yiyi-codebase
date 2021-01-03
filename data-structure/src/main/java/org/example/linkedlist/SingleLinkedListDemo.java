@@ -1,5 +1,7 @@
 package org.example.linkedlist;
 
+import java.util.Stack;
+
 /**
  * @Title:
  * @Author: cmy
@@ -32,6 +34,10 @@ public class SingleLinkedListDemo {
         list.addByOrder(node4);
 
         list.list();
+        System.out.println();
+
+        System.out.println("逆序打印单链表");
+        reversePrint(list.getHead());
         System.out.println();
 
         // 修改节点
@@ -67,6 +73,35 @@ public class SingleLinkedListDemo {
         System.out.println();
     }
 
+    /**
+     * 逆序打印链表
+     *
+     * @param head 链表的头节点
+     */
+    public static void reversePrint(HeroNode head) {
+        // 若链表为空，则直接返回
+        if (head.next == null) {
+            return;
+        }
+
+        Stack<HeroNode> stack = new Stack<>();
+        HeroNode cur = head.next;
+
+        while (cur != null) {
+            stack.push(cur);
+            cur = cur.next;
+        }
+
+        while (stack.size() > 0) {
+            System.out.println(stack.pop());
+        }
+    }
+
+    /**
+     * 反转链表
+     *
+     * @param head 链表的头节点
+     */
     public static void reverseList(HeroNode head) {
         // 若链表为空或只有一个节点，则直接返回
         if (head.next == null || head.next.next == null) {
