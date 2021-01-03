@@ -32,6 +32,7 @@ public class SingleLinkedListDemo {
         list.addByOrder(node4);
 
         list.list();
+        System.out.println();
 
         // 修改节点
         HeroNode newHeroNode1 = new HeroNode(2, "233", "233~~");
@@ -40,6 +41,16 @@ public class SingleLinkedListDemo {
         list.update(newHeroNode2);
 
         list.list();
+        System.out.println();
+
+        // 删除节点
+        list.delete(0);
+        list.delete(6);
+        list.delete(2);
+        list.delete(4);
+
+        list.list();
+        System.out.println();
     }
 }
 
@@ -124,6 +135,35 @@ class SingleLinkedList {
             temp.nickName = newHeroNode.nickName;
         } else {
             System.out.printf("不存在编号为 %d 的节点\n", newHeroNode.no);
+        }
+    }
+
+    public void delete(int no) {
+        // 辅助变量 temp，指向要添加的位置的前一个的节点
+        HeroNode temp = this.head;
+        boolean isExist = false;
+
+        while (true) {
+            // 判断是否到链表末尾
+            if (temp.next == null) {
+                break;
+            }
+
+            // 判断是否找到了目标位置
+            else if (temp.next.no == no) {
+                isExist = true;
+                break;
+            }
+
+            // 遍历下一个节点
+            temp = temp.next;
+        }
+
+        // 删除节点
+        if (isExist) {
+            temp.next = temp.next.next;
+        } else {
+            System.out.printf("不存在编号为 %d 的节点\n", no);
         }
     }
 
