@@ -8,7 +8,41 @@ package org.example.linkedlist;
 public class DoubleLinkedListDemo {
 
     public static void main(String[] args) {
+        System.out.println("测试双向链表");
+        HeroNode2 node1 = new HeroNode2(1, "1", "11");
+        HeroNode2 node2 = new HeroNode2(2, "2", "22");
+        HeroNode2 node3 = new HeroNode2(3, "3", "33");
+        HeroNode2 node4 = new HeroNode2(4, "4", "44");
+        HeroNode2 node5 = new HeroNode2(5, "5", "55");
+        DoubleLinkedList list = new DoubleLinkedList();
 
+        // 添加节点
+        list.add(node1);
+        list.add(node2);
+        list.add(node3);
+        list.add(node4);
+        list.add(node5);
+
+        list.list();
+        System.out.println();
+
+        // 修改节点
+        HeroNode2 newHeroNode1 = new HeroNode2(2, "233", "233~~");
+        HeroNode2 newHeroNode2 = new HeroNode2(7, "233", "233~~");
+        list.update(newHeroNode1);
+        list.update(newHeroNode2);
+
+        list.list();
+        System.out.println();
+
+        // 删除节点
+        list.delete(0);
+        list.delete(6);
+        list.delete(2);
+        list.delete(4);
+
+        list.list();
+        System.out.println();
     }
 }
 
