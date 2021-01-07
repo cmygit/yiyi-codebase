@@ -1,11 +1,57 @@
 package org.example.stack;
 
+import java.util.Scanner;
+
 /**
  * @Title:
  * @Author: cmy
  * @Date: 2021/1/7 20:10
  */
 public class ArrayStackDemo {
+
+    public static void main(String[] args) {
+        ArrayStack stack = new ArrayStack(4);
+        String key;
+        boolean loop = true;
+        Scanner scanner = new Scanner(System.in);
+
+        while (loop) {
+            System.out.println("show(s): 显示栈");
+            System.out.println("exit(e): 退出");
+            System.out.println("push(p): 入栈");
+            System.out.println("pop(pp): 出栈");
+            System.out.println("请输入你的选择");
+
+            key = scanner.next();
+
+            switch (key) {
+                case "s":
+                    stack.list();
+                    break;
+                case "p":
+                    System.out.println("请输入一个数");
+                    int value = scanner.nextInt();
+                    stack.push(value);
+                    break;
+                case "pp":
+                    try {
+                        int res = stack.pop();
+                        System.out.printf("出栈的数据%d\n", res);
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case "e":
+                    scanner.close();
+                    loop = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        System.out.println("程序退出");
+    }
 }
 
 /**
@@ -64,7 +110,7 @@ class ArrayStack {
 
     public void list() {
         if (this.isEmpty()) {
-            System.out.println("栈已空，无法出栈");
+            System.out.println("栈已空");
             return;
         }
 
