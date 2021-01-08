@@ -9,7 +9,7 @@ public class Calculator {
 
     public static void main(String[] args) {
         // 需要运算的表达式
-        String expression = "3+2*6-2";
+        String expression = "70+20*6-4";
         // 操作数栈
         CalStack numStack = new CalStack(10);
         // 运算符号栈
@@ -22,6 +22,8 @@ public class Calculator {
         int opt = 0;
         int res = 0;
         char ch = ' ';
+        // 保存操作数
+        StringBuilder keepNum = new StringBuilder();
 
         // 扫描表达式
         while (true) {
@@ -49,13 +51,30 @@ public class Calculator {
                         numStack.push(res);
                     }
                 }
+
                 optStack.push(ch);
             }
-            // 如果是数
+            // 如果是操作数
             else {
-                // 直接入栈
-                // 字符数字转数字需要对照asc||码表移位
-                numStack.push(ch - 48);
+                keepNum.append(ch);
+
+                // 若已扫描到最后一位，直接入栈
+                if (index == expression.length() - 1) {
+                    numStack.push(Integer.parseInt(keepNum.toString()));
+                } else {
+                    /*
+                        需要考虑操作数是否为多位数，继续扫描表达式的下一位，
+                        若为操作符，说明扫描完了一个完整的操作数，将结果入栈，否则继续遍历。
+                    */
+                    char nextCh = expression.substring(index + 1, index + 2)
+                                            .charAt(0);
+
+                    if (optStack.isOperation(nextCh)) {
+                        numStack.push(Integer.parseInt(keepNum.toString()));
+                        // 入栈后清空辅助变量
+                        keepNum.delete(0, keepNum.length());
+                    }
+                }
             }
 
             // 移位
