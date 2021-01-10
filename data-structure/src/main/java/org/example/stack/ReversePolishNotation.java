@@ -17,8 +17,11 @@ public class ReversePolishNotation {
         // 1、1 + ( ( 2 + 3 ) * 4 ) - 5 -> 1 2 3 + 4 * + 5 -
         String expression = "1+((2+3)*4)-5";
         List<String> expList = toInfixExpressionList(expression);
-        System.out.println(expList);
-
+        System.out.println("中缀表达式：" + expList);
+        List<String> suffixExpList = parseSuffixExpressionList(expList);
+        System.out.println("后缀表达式：" + suffixExpList);
+        int res = calculate(suffixExpList);
+        System.out.println("res: " + res);
     }
 
     public static void testSuffixExpression() {
@@ -33,6 +36,43 @@ public class ReversePolishNotation {
         System.out.println("res: " + res);
     }
 
+    public static List<String> parseSuffixExpressionList(List<String> expList) {
+        Stack<String> optStack = new Stack<>();
+        List<String> suffixExpList = new ArrayList<>();
+
+        for (String item : expList) {
+            if (item.matches("\\d+")) {
+                // 如果是数
+                suffixExpList.add(item);
+            } else if ("(".equals(item)) {
+                // 如果是左括号
+                optStack.push(item);
+            } else if (")".equals(item)) {
+                // 如果是右括号，则依次弹出s1栈顶的运算符，并压入s2，直到遇到左括号为止，然后消除一对括号
+                while (!"(".equals(optStack.peek())) {
+                    suffixExpList.add(optStack.pop());
+                }
+                // 消除一对括号
+                optStack.pop();
+            } else {
+                // 如果是操作符
+                // 当操作符优先级小于等于 optStack 栈顶操作符的优先级，将栈顶操作符弹出并压入 suffixExpList 中，然后继续比较
+                while (optStack.size() > 0 && Operation.getPriority(item) <= Operation.getPriority(optStack.peek())) {
+                    suffixExpList.add(optStack.pop());
+                }
+                // 比较完毕，入栈
+                optStack.push(item);
+            }
+        }
+
+        // 将 optStack 剩余的运算符压入 suffixExpList
+        while (optStack.size() > 0) {
+            suffixExpList.add(optStack.pop());
+        }
+
+        return suffixExpList;
+    }
+
     /**
      * 将表达式转为链表
      *
@@ -44,7 +84,7 @@ public class ReversePolishNotation {
         // 遍历指针
         int index = 0;
         // 保存多位数
-        StringBuilder str = new StringBuilder();
+        StringBuilder numStr = new StringBuilder();
         // 遍历字符
         char c;
 
@@ -58,7 +98,7 @@ public class ReversePolishNotation {
             } else {
                 // 如果是数字，还需要考虑多位数的情况
                 while (index < exp.length() && c >= 48 && c <= 57) {
-                    str.append(c);
+                    numStr.append(c);
                     // 移位
                     index++;
 
@@ -68,9 +108,9 @@ public class ReversePolishNotation {
                     }
                 }
 
-                expList.add(str.toString());
+                expList.add(numStr.toString());
                 // 重置辅助变量
-                str.delete(0, str.length());
+                numStr.delete(0, numStr.length());
             }
         }
 
@@ -115,5 +155,40 @@ public class ReversePolishNotation {
         }
 
         return Integer.parseInt(stack.pop());
+    }
+}
+
+class Operation {
+
+    private final static int ADD = 1;
+
+    private final static int SUB = 1;
+
+    private final static int MUL = 2;
+
+    private final static int DIV = 2;
+
+    public static int getPriority(String opt) {
+        int res = 0;
+
+        switch (opt) {
+            case "+":
+                res = ADD;
+                break;
+            case "-":
+                res = SUB;
+                break;
+            case "*":
+                res = MUL;
+                break;
+            case "/":
+                res = DIV;
+                break;
+            default:
+                System.out.println("不支持该运算符");
+                break;
+        }
+
+        return res;
     }
 }
