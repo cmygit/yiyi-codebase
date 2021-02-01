@@ -8,14 +8,35 @@ package org.example.tree;
 public class BinaryTreeDemo {
 
     public static void main(String[] args) {
+        BinaryTree tree = new BinaryTree();
 
+        HeroNode root = new HeroNode(1, "宋江");
+        tree.setRoot(root);
+        HeroNode node2 = new HeroNode(2, "吴用");
+        HeroNode node3 = new HeroNode(3, "卢俊义");
+        HeroNode node4 = new HeroNode(4, "林冲");
+        HeroNode node5 = new HeroNode(5, "关胜");
+
+        root.setLeft(node2);
+        root.setRight(node3);
+        node3.setRight(node4);
+        node3.setLeft(node5);
+
+        System.out.println("前序遍历");
+        tree.preOrder();
+
+        System.out.println("中序遍历");
+        tree.inFixOrder();
+
+        System.out.println("后序遍历");
+        tree.postOrder();
     }
 
     private static class BinaryTree {
 
         private HeroNode root;
 
-        public BinaryTree(HeroNode root) {
+        public void setRoot(HeroNode root) {
             this.root = root;
         }
 
