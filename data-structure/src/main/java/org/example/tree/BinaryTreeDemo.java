@@ -54,6 +54,14 @@ public class BinaryTreeDemo {
         } else {
             System.out.println("没找到目标值");
         }
+
+        System.out.println("删除前，前序遍历");
+        tree.preOrder();
+
+        tree.delNode(3);
+
+        System.out.println("删除后，前序遍历");
+        tree.preOrder();
     }
 
     private static class BinaryTree {
@@ -62,6 +70,18 @@ public class BinaryTreeDemo {
 
         public void setRoot(HeroNode root) {
             this.root = root;
+        }
+
+        public void delNode(int no) {
+            if (this.root != null) {
+                if (this.root.getNo() == no) {
+                    this.root = null;
+                } else {
+                    this.root.delNode(no);
+                }
+            } else {
+                System.out.println("空树，无法删除");
+            }
         }
 
         /**
@@ -193,6 +213,26 @@ public class BinaryTreeDemo {
                     "no=" + no +
                     ", name='" + name +
                     "}";
+        }
+
+        public void delNode(int no) {
+            if (this.left != null && this.left.no == no) {
+                this.left = null;
+                return;
+            }
+
+            if (this.right != null && this.right.no == no) {
+                this.right = null;
+                return;
+            }
+
+            if (this.left != null) {
+                this.left.delNode(no);
+            }
+
+            if (this.right != null) {
+                this.right.delNode(no);
+            }
         }
 
         /**
