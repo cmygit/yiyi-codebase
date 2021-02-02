@@ -72,6 +72,48 @@ public class BinaryTreeDemo {
                 System.out.println("二叉树为空~");
             }
         }
+
+        /**
+         * 前序查找
+         *
+         * @param no 查找目标值
+         * @return 目标节点
+         */
+        public HeroNode preOrderSearch(int no) {
+            if (this.root != null) {
+                return this.root.preOrderSearch(no);
+            } else {
+                return null;
+            }
+        }
+
+        /**
+         * 中序查找
+         *
+         * @param no 查找目标值
+         * @return 目标节点
+         */
+        public HeroNode inFixOrderSearch(int no) {
+            if (this.root != null) {
+                return this.root.inFixOrderSearch(no);
+            } else {
+                return null;
+            }
+        }
+
+        /**
+         * 后序查找
+         *
+         * @param no 查找目标值
+         * @return 目标节点
+         */
+        public HeroNode postOrderSearch(int no) {
+            if (this.root != null) {
+                return this.root.postOrderSearch(no);
+            } else {
+                return null;
+            }
+        }
     }
 
     private static class HeroNode {
@@ -181,6 +223,94 @@ public class BinaryTreeDemo {
 
             // 输出父节点
             System.out.println(this);
+        }
+
+        /**
+         * 前序查找
+         *
+         * @param no 查找目标值
+         * @return 目标节点
+         */
+        public HeroNode preOrderSearch(int no) {
+            if (this.no == no) {
+                return this;
+            }
+
+            HeroNode targetNode = null;
+
+            if (this.left != null) {
+                targetNode = this.left.preOrderSearch(no);
+            }
+
+            if (targetNode != null) {
+                return targetNode;
+            }
+
+            if (this.right != null) {
+                targetNode = this.right.preOrderSearch(no);
+            }
+
+            return targetNode;
+        }
+
+        /**
+         * 中序查找
+         *
+         * @param no 查找目标值
+         * @return 目标节点
+         */
+        public HeroNode inFixOrderSearch(int no) {
+            HeroNode targetNode = null;
+
+            if (this.left != null) {
+                targetNode = this.left.preOrderSearch(no);
+            }
+
+            if (targetNode != null) {
+                return targetNode;
+            }
+
+            if (this.no == no) {
+                return this;
+            }
+
+            if (this.right != null) {
+                targetNode = this.right.preOrderSearch(no);
+            }
+
+            return targetNode;
+        }
+
+        /**
+         * 后序查找
+         *
+         * @param no 查找目标值
+         * @return 目标节点
+         */
+        public HeroNode postOrderSearch(int no) {
+            HeroNode targetNode = null;
+
+            if (this.left != null) {
+                targetNode = this.left.preOrderSearch(no);
+            }
+
+            if (targetNode != null) {
+                return targetNode;
+            }
+
+            if (this.right != null) {
+                targetNode = this.right.preOrderSearch(no);
+            }
+
+            if (targetNode != null) {
+                return targetNode;
+            }
+
+            if (this.no == no) {
+                return this;
+            }
+
+            return null;
         }
     }
 }
