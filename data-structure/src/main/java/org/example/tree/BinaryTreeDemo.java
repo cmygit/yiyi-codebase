@@ -30,6 +30,30 @@ public class BinaryTreeDemo {
 
         System.out.println("后序遍历");
         tree.postOrder();
+
+        System.out.println("前序查找");
+        HeroNode targetNode = tree.preOrderSearch(2);
+        if (targetNode != null) {
+            System.out.println("找到目标值：" + targetNode);
+        } else {
+            System.out.println("没找到目标值");
+        }
+
+        System.out.println("中序查找");
+        targetNode = tree.inFixOrderSearch(4);
+        if (targetNode != null) {
+            System.out.println("找到目标值：" + targetNode);
+        } else {
+            System.out.println("没找到目标值");
+        }
+
+        System.out.println("后序查找");
+        targetNode = tree.postOrderSearch(5);
+        if (targetNode != null) {
+            System.out.println("找到目标值：" + targetNode);
+        } else {
+            System.out.println("没找到目标值");
+        }
     }
 
     private static class BinaryTree {
