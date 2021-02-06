@@ -8,7 +8,26 @@ package org.example.tree;
 public class ThreadedBinaryTreeDemo {
 
     public static void main(String[] args) {
+        HeroNode root = new HeroNode(1, "tom");
+        HeroNode node2 = new HeroNode(3, "jack");
+        HeroNode node3 = new HeroNode(6, "smith");
+        HeroNode node4 = new HeroNode(8, "mary");
+        HeroNode node5 = new HeroNode(10, "lucy");
+        HeroNode node6 = new HeroNode(14, "jean");
 
+        root.setLeft(node2);
+        root.setRight(node3);
+
+        node2.setLeft(node4);
+        node2.setRight(node5);
+
+        node3.setLeft(node6);
+
+        BinaryTree tree = new BinaryTree();
+        tree.setRoot(root);
+        tree.threadedNodes();
+
+        node5.printPrevAndNextNode();
     }
 
     private static class BinaryTree {
@@ -22,6 +41,10 @@ public class ThreadedBinaryTreeDemo {
 
         public void setRoot(HeroNode root) {
             this.root = root;
+        }
+
+        public void threadedNodes() {
+            this.threadedNodes(this.root);
         }
 
         /**
@@ -149,6 +172,16 @@ public class ThreadedBinaryTreeDemo {
                     "no=" + no +
                     ", name='" + name +
                     "}";
+        }
+
+        public void printPrevAndNextNode() {
+            if (this.getLeftType() == 1) {
+                System.out.println("node-" + this.getNo() + "的前驱结点：" + this.getLeft());
+            }
+
+            if (this.getRightType() == 1) {
+                System.out.println("node-" + this.getNo() + "的后继结点：" + this.getRight());
+            }
         }
 
         public void delNode(int no) {
