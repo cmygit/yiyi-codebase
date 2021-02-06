@@ -28,6 +28,9 @@ public class ThreadedBinaryTreeDemo {
         tree.threadedNodes();
 
         node5.printPrevAndNextNode();
+
+        System.out.println("线索化中序遍历二叉树");
+        tree.threadList();
     }
 
     private static class BinaryTree {
@@ -41,6 +44,38 @@ public class ThreadedBinaryTreeDemo {
 
         public void setRoot(HeroNode root) {
             this.root = root;
+        }
+
+        /**
+         * 线索化中序遍历二叉树
+         */
+        public void threadList() {
+            HeroNode curNode = this.root;
+
+            while (curNode != null) {
+                // 遍历左子树
+                while (curNode != null) {
+                    if (curNode.getLeftType() == 1) {
+                        break;
+                    }
+
+                    curNode = curNode.getLeft();
+                }
+
+                // 叶子结点
+                System.out.println(curNode);
+
+                if (curNode != null && curNode.getRightType() == 1) {
+                    // 找后继结点(中序点)
+                    curNode = curNode.getRight();
+                    System.out.println(curNode);
+                }
+
+                // 遍历右子树
+                if (curNode != null) {
+                    curNode = curNode.getRight();
+                }
+            }
         }
 
         public void threadedNodes() {
