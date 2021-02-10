@@ -1,9 +1,6 @@
 package org.example.huffmancode;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -14,19 +11,67 @@ import java.util.stream.Collectors;
  */
 public class HuffmanCodeDemo {
 
+    private static final Map<Byte, String> HUFFMAN_CODES = new HashMap<>();
+
     public static void main(String[] args) {
         String content = "i like like like java do you like a java";
         byte[] contentBytes = content.getBytes();
 
         List<Node> nodes = getNodes(contentBytes);
-
+        System.out.println("结点集合");
         System.out.println(nodes);
 
+        System.out.println("创建哈夫曼树");
         Node root = createHuffmanTree(nodes);
+
+        System.out.println("前序遍历");
         preOrder(root);
+
+        System.out.println("生成哈夫曼编码表");
+        Map<Byte, String> codes = getCodes(root);
+        System.out.println(codes);
     }
 
-    public static void preOrder(Node node) {
+    private static Map<Byte, String> getCodes(Node root) {
+        if (root == null) {
+            return null;
+        }
+
+        getCodes(root, "", new StringBuilder());
+
+        return HUFFMAN_CODES;
+    }
+
+    /**
+     * 构建哈夫曼编码表
+     *
+     * @param node      结点
+     * @param direction 路径方向 左子结点为0，右子结点为1
+     * @param codeStr   编码
+     */
+    private static void getCodes(Node node, String direction, StringBuilder codeStr) {
+        // 拷贝当前编码
+        StringBuilder curCodeStr = new StringBuilder(codeStr);
+        // 连接路径方向
+        curCodeStr.append(direction);
+
+        if (node != null) {
+            // 非叶子结点
+            if (node.getData() == null) {
+                // 向左递归
+                getCodes(node.left, "0", curCodeStr);
+                // 向右递归
+                getCodes(node.right, "1", curCodeStr);
+            }
+            // 叶子结点
+            else {
+                // 添加编码
+                HUFFMAN_CODES.put(node.getData(), curCodeStr.toString());
+            }
+        }
+    }
+
+    private static void preOrder(Node node) {
         node.preOrder();
     }
 
