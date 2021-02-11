@@ -21,6 +21,9 @@ public class HuffmanCodeDemo {
         byte[] zipBytes = huffmanZip(contentBytes);
         System.out.println("zipBytes = " + Arrays.toString(zipBytes));
 
+        String str = byteToBitStr(false, (byte) -1);
+        System.out.println("str = " + str);
+
         // System.out.println("原始内容：" + content);
         // System.out.println("原始的字节数组：" + Arrays.toString(contentBytes));
         //
@@ -37,6 +40,30 @@ public class HuffmanCodeDemo {
         //
         // byte[] huffmanCodeBytes = zip(contentBytes, HUFFMAN_CODES);
         // System.out.println("压缩后的字节数组：" + Arrays.toString(huffmanCodeBytes));
+    }
+
+    /**
+     * 按补码将字节转对应的二进制字符串
+     *
+     * @param flag 表示是否需要补位
+     * @param b    字节
+     * @return 二进制字符串
+     */
+    private static String byteToBitStr(boolean flag, byte b) {
+        // byte转int
+        int temp = b;
+        // 与运算，针对正数的补位
+        if (flag) {
+            temp |= 256;
+        }
+
+        String str = Integer.toBinaryString(temp);
+
+        if (flag) {
+            return str.substring(str.length() - 8);
+        } else {
+            return str;
+        }
     }
 
     /**
