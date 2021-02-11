@@ -16,20 +16,62 @@ public class HuffmanCodeDemo {
     public static void main(String[] args) {
         String content = "i like like like java do you like a java";
         byte[] contentBytes = content.getBytes();
+        System.out.println("原始内容：" + content);
+        System.out.println("原始的字节数组：" + Arrays.toString(contentBytes));
 
         List<Node> nodes = getNodes(contentBytes);
-        System.out.println("结点集合");
-        System.out.println(nodes);
+        System.out.println("结点集合：" + nodes);
 
-        System.out.println("创建哈夫曼树");
         Node root = createHuffmanTree(nodes);
 
-        System.out.println("前序遍历");
+        System.out.println("前序遍历夫曼树");
         preOrder(root);
 
-        System.out.println("生成哈夫曼编码表");
         Map<Byte, String> codes = getCodes(root);
-        System.out.println(codes);
+        System.out.println("生成哈夫曼编码表：" + codes);
+
+        byte[] huffmanCodeBytes = zip(contentBytes, HUFFMAN_CODES);
+        System.out.println("压缩后的字节数组：" + Arrays.toString(huffmanCodeBytes));
+    }
+
+    /**
+     * 压缩
+     *
+     * @param bytes        原始字符串
+     * @param huffmanCodes 编码表
+     * @return 压缩后的字节数组
+     */
+    private static byte[] zip(byte[] bytes, Map<Byte, String> huffmanCodes) {
+        StringBuilder zipStr = new StringBuilder();
+
+        for (byte b : bytes) {
+            zipStr.append(huffmanCodes.get(b));
+        }
+
+        int len = zipStr.length() / 8;
+        if (zipStr.length() % 8 != 0) {
+            len++;
+        }
+
+        byte[] huffmanCodeBytes = new byte[len];
+        // 记录遍历到第几个byte
+        int index = 0;
+        // 每8位对应一个byte，所以迭代的步长为8
+        for (int i = 0; i < zipStr.length(); i += 8) {
+            String byteStr;
+            // 最后一次循环不足8位的部分
+            if (i + 8 > zipStr.length()) {
+                byteStr = zipStr.substring(i);
+            } else {
+                byteStr = zipStr.substring(i, i + 8);
+            }
+
+            // 编码转字节
+            huffmanCodeBytes[index] = (byte) Integer.parseInt(byteStr, 2);
+            index++;
+        }
+
+        return huffmanCodeBytes;
     }
 
     private static Map<Byte, String> getCodes(Node root) {
