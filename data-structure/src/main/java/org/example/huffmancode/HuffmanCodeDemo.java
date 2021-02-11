@@ -21,8 +21,8 @@ public class HuffmanCodeDemo {
         byte[] zipBytes = huffmanZip(contentBytes);
         System.out.println("zipBytes = " + Arrays.toString(zipBytes));
 
-        String str = byteToBitStr(false, (byte) -1);
-        System.out.println("str = " + str);
+        byte[] sourceBytes = decode(HUFFMAN_CODES, zipBytes);
+        System.out.println("sourceContent = " + new String(sourceBytes));
 
         // System.out.println("原始内容：" + content);
         // System.out.println("原始的字节数组：" + Arrays.toString(contentBytes));
@@ -43,16 +43,75 @@ public class HuffmanCodeDemo {
     }
 
     /**
+     * 解码
+     *
+     * @param huffmanCodes 哈夫曼编码表
+     * @param huffmanBytes 编码后的字节数组
+     * @return 解码后的原字节数组
+     */
+    private static byte[] decode(Map<Byte, String> huffmanCodes, byte[] huffmanBytes) {
+        StringBuilder huffmanStr = new StringBuilder();
+
+        for (int i = 0; i < huffmanBytes.length; i++) {
+            // 是否最后一个字符
+            boolean flag = i == huffmanBytes.length - 1;
+            huffmanStr.append(byteToBitStr(!flag, huffmanBytes[i]));
+        }
+
+        // 解码
+        // 反转编码表 (两种方法)
+        // 1、foreach
+        // Map<String, Byte> map = new HashMap<>();
+        // huffmanCodes.forEach((k, v) -> map.put(v, k));
+
+        // 2、stream
+        Map<String, Byte> map = huffmanCodes.entrySet()
+                                            .stream()
+                                            .collect(Collectors.toMap(
+                                                    Map.Entry::getValue, Map.Entry::getKey
+                                            ));
+
+        List<Byte> byteList = new ArrayList<>();
+        for (int i = 0; i < huffmanStr.length(); ) {
+            int count = 1;
+            Byte b;
+
+            while (true) {
+                // 根据哈夫曼编码的前缀编码特性，逐步匹配编码，直到匹配成功
+                String key = huffmanStr.substring(i, i + count);
+                b = map.get(key);
+
+                if (b == null) {
+                    count++;
+                } else {
+                    break;
+                }
+            }
+
+            byteList.add(b);
+            // 移位
+            i += count;
+        }
+
+        byte[] bytes = new byte[byteList.size()];
+        for (int i = 0; i < byteList.size(); i++) {
+            bytes[i] = byteList.get(i);
+        }
+
+        return bytes;
+    }
+
+    /**
      * 按补码将字节转对应的二进制字符串
      *
-     * @param flag 表示是否需要补位
+     * @param flag 表示是否需要补位，最后一个字符不需要补位
      * @param b    字节
      * @return 二进制字符串
      */
     private static String byteToBitStr(boolean flag, byte b) {
         // byte转int
         int temp = b;
-        // 与运算，针对正数的补位
+        // 与运算，针对正数的补位，最后一个字符不需要补位
         if (flag) {
             temp |= 256;
         }
@@ -175,7 +234,6 @@ public class HuffmanCodeDemo {
      * @return 结点集合
      */
     private static List<Node> getNodes(byte[] bytes) {
-        List<Node> nodes = new ArrayList<>();
 
         List<Byte> byteList = new ArrayList<>();
         for (byte b : bytes) {
@@ -187,8 +245,16 @@ public class HuffmanCodeDemo {
                                          .collect(Collectors.groupingBy(
                                                  Function.identity(), Collectors.counting()
                                          ));
-        // 构建结点集合
-        counts.forEach((k, v) -> nodes.add(new Node(k, Math.toIntExact(v))));
+        // 构建结点集合 (两种方法)
+        // 1、foreach
+        // List<Node> nodes = new ArrayList<>();
+        // counts.forEach((k, v) -> nodes.add(new Node(k, Math.toIntExact(v))));
+
+        // 2、stream
+        List<Node> nodes = counts.entrySet()
+                                 .stream()
+                                 .map((item) -> new Node(item.getKey(), Math.toIntExact(item.getValue())))
+                                 .collect(Collectors.toList());
 
         return nodes;
     }
