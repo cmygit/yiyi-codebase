@@ -16,22 +16,46 @@ public class HuffmanCodeDemo {
     public static void main(String[] args) {
         String content = "i like like like java do you like a java";
         byte[] contentBytes = content.getBytes();
-        System.out.println("原始内容：" + content);
-        System.out.println("原始的字节数组：" + Arrays.toString(contentBytes));
+        System.out.println("contentBytes = " + Arrays.toString(contentBytes));
 
-        List<Node> nodes = getNodes(contentBytes);
-        System.out.println("结点集合：" + nodes);
+        byte[] zipBytes = huffmanZip(contentBytes);
+        System.out.println("zipBytes = " + Arrays.toString(zipBytes));
 
+        // System.out.println("原始内容：" + content);
+        // System.out.println("原始的字节数组：" + Arrays.toString(contentBytes));
+        //
+        // List<Node> nodes = getNodes(contentBytes);
+        // System.out.println("结点集合：" + nodes);
+        //
+        // Node root = createHuffmanTree(nodes);
+        //
+        // System.out.println("前序遍历夫曼树");
+        // preOrder(root);
+        //
+        // Map<Byte, String> codes = getCodes(root);
+        // System.out.println("生成哈夫曼编码表：" + codes);
+        //
+        // byte[] huffmanCodeBytes = zip(contentBytes, HUFFMAN_CODES);
+        // System.out.println("压缩后的字节数组：" + Arrays.toString(huffmanCodeBytes));
+    }
+
+    /**
+     * 哈夫曼编码压缩字节数组
+     *
+     * @param sourceBytes 原数组
+     * @return 压缩后的数组
+     */
+    private static byte[] huffmanZip(byte[] sourceBytes) {
+        // 构建哈夫曼树结点
+        List<Node> nodes = getNodes(sourceBytes);
+        // 创建哈夫曼树
         Node root = createHuffmanTree(nodes);
+        // 生成哈夫曼编码表
+        Map<Byte, String> huffmanCodes = getCodes(root);
+        // 压缩数据
+        byte[] zipBytes = zip(sourceBytes, huffmanCodes);
 
-        System.out.println("前序遍历夫曼树");
-        preOrder(root);
-
-        Map<Byte, String> codes = getCodes(root);
-        System.out.println("生成哈夫曼编码表：" + codes);
-
-        byte[] huffmanCodeBytes = zip(contentBytes, HUFFMAN_CODES);
-        System.out.println("压缩后的字节数组：" + Arrays.toString(huffmanCodeBytes));
+        return zipBytes;
     }
 
     /**
