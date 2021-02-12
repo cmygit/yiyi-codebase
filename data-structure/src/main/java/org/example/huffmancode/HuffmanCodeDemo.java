@@ -1,5 +1,9 @@
 package org.example.huffmancode;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -14,16 +18,25 @@ public class HuffmanCodeDemo {
     private static final Map<Byte, String> HUFFMAN_CODES = new HashMap<>();
 
     public static void main(String[] args) {
-        String content = "i like like like java do you like a java";
-        byte[] contentBytes = content.getBytes();
-        System.out.println("contentBytes = " + Arrays.toString(contentBytes));
+        // 压缩文件
+        String srcFile = "D:\\resources\\temp\\test.png";
+        String dstFile = "D:\\resources\\temp\\dst.zip";
 
-        byte[] zipBytes = huffmanZip(contentBytes);
-        System.out.println("zipBytes = " + Arrays.toString(zipBytes));
+        zipFile(srcFile, dstFile);
+        System.out.println("压缩文件成功");
 
-        byte[] sourceBytes = decode(HUFFMAN_CODES, zipBytes);
-        System.out.println("sourceContent = " + new String(sourceBytes));
+        // 调试代码1
+        // String content = "i like like like java do you like a java";
+        // byte[] contentBytes = content.getBytes();
+        // System.out.println("contentBytes = " + Arrays.toString(contentBytes));
+        //
+        // byte[] zipBytes = huffmanZip(contentBytes);
+        // System.out.println("zipBytes = " + Arrays.toString(zipBytes));
+        //
+        // byte[] sourceBytes = decode(HUFFMAN_CODES, zipBytes);
+        // System.out.println("sourceContent = " + new String(sourceBytes));
 
+        // 调试代码2
         // System.out.println("原始内容：" + content);
         // System.out.println("原始的字节数组：" + Arrays.toString(contentBytes));
         //
@@ -40,6 +53,24 @@ public class HuffmanCodeDemo {
         //
         // byte[] huffmanCodeBytes = zip(contentBytes, HUFFMAN_CODES);
         // System.out.println("压缩后的字节数组：" + Arrays.toString(huffmanCodeBytes));
+    }
+
+    public static void zipFile(String srcFile, String dstFile) {
+        try (FileInputStream fis = new FileInputStream(srcFile);
+             FileOutputStream fos = new FileOutputStream(dstFile);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            byte[] buffer = new byte[fis.available()];
+            // 读取文件
+            fis.read(buffer);
+            // 压缩字节
+            byte[] zipBytes = huffmanZip(buffer);
+            // 使用对象流写入压缩字节
+            oos.writeObject(zipBytes);
+            // 写入哈夫曼编码，用于恢复文件
+            oos.writeObject(HUFFMAN_CODES);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
