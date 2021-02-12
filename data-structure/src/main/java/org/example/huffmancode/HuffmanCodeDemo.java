@@ -1,9 +1,6 @@
 package org.example.huffmancode;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -21,9 +18,13 @@ public class HuffmanCodeDemo {
         // 压缩文件
         String srcFile = "D:\\resources\\temp\\test.png";
         String dstFile = "D:\\resources\\temp\\dst.zip";
+        String dstFile2 = "D:\\resources\\temp\\test2.png";
 
         zipFile(srcFile, dstFile);
         System.out.println("压缩文件成功");
+
+        unZipFile(dstFile, dstFile2);
+        System.out.println("解压文件成功");
 
         // 调试代码1
         // String content = "i like like like java do you like a java";
@@ -55,6 +56,34 @@ public class HuffmanCodeDemo {
         // System.out.println("压缩后的字节数组：" + Arrays.toString(huffmanCodeBytes));
     }
 
+    /**
+     * 解压文件
+     *
+     * @param srcFile
+     * @param dstFile
+     */
+    public static void unZipFile(String srcFile, String dstFile) {
+        try (FileInputStream fis = new FileInputStream(srcFile);
+             ObjectInputStream ois = new ObjectInputStream(fis);
+             FileOutputStream fos = new FileOutputStream(dstFile)) {
+            // 读取压缩内容
+            byte[] zipBytes = (byte[]) ois.readObject();
+            // 读取哈夫曼编码表
+            Map<Byte, String> huffmanCodeMap = (Map<Byte, String>) ois.readObject();
+            // 解压内容
+            byte[] sourceBytes = decode(huffmanCodeMap, zipBytes);
+            fos.write(sourceBytes);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 压缩文件
+     *
+     * @param srcFile 源文件
+     * @param dstFile 目标文件
+     */
     public static void zipFile(String srcFile, String dstFile) {
         try (FileInputStream fis = new FileInputStream(srcFile);
              FileOutputStream fos = new FileOutputStream(dstFile);
