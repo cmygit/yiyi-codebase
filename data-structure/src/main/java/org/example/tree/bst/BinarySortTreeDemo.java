@@ -12,12 +12,15 @@ public class BinarySortTreeDemo {
 
         BinarySortTree tree = new BinarySortTree();
 
-        for (int i = 0; i < arr.length; i++) {
-            tree.add(new Node(arr[i]));
+        for (int value : arr) {
+            tree.add(new Node(value));
         }
 
         System.out.println("中序遍历：");
         tree.infixOrder();
+
+        Node node = tree.search(99);
+        System.out.println("node = " + node);
     }
 
     private static class BinarySortTree {
@@ -39,6 +42,15 @@ public class BinarySortTreeDemo {
             }
 
             this.root.infixOrder();
+        }
+
+        public Node search(int value) {
+            if (this.root == null) {
+                System.out.println("树为空，无法查找");
+                return null;
+            }
+
+            return this.root.search(value);
         }
     }
 
@@ -90,6 +102,51 @@ public class BinarySortTreeDemo {
 
             if (this.right != null) {
                 this.right.infixOrder();
+            }
+        }
+
+        /**
+         * 查找目标结点
+         *
+         * @param value 目标值
+         * @return 目标结点
+         */
+        public Node search(int value) {
+            if (this.value > value) {
+                if (this.left == null) {
+                    return null;
+                }
+
+                return this.left.search(value);
+            } else if (this.value < value) {
+                if (this.right == null) {
+                    return null;
+                }
+
+                return this.right.search(value);
+            } else {
+                return this;
+            }
+        }
+
+        /**
+         * 查找目标结点的父结点
+         *
+         * @param value 目标值
+         * @return 父结点
+         */
+        public Node searchParent(int value) {
+            if ((this.left != null && this.left.value == value)
+                    || (this.right != null && this.right.value == value)) {
+                return this;
+            } else {
+                if (this.value > value && this.left != null) {
+                    return this.left.searchParent(value);
+                } else if (this.value <= value && this.right != null) {
+                    return this.right.searchParent(value);
+                } else {
+                    return null;
+                }
             }
         }
     }
