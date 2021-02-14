@@ -8,7 +8,7 @@ package org.example.tree.bst;
 public class BinarySortTreeDemo {
 
     public static void main(String[] args) {
-        int[] arr = {7, 3, 10, 12, 5, 1, 9,2};
+        int[] arr = {7, 3, 10, 12, 5, 1, 9, 2};
 
         BinarySortTree tree = new BinarySortTree();
 
@@ -19,8 +19,9 @@ public class BinarySortTreeDemo {
         System.out.println("中序遍历：");
         tree.infixOrder();
 
-        System.out.println("删除叶子结点~");
-        tree.delNode(2);
+        int delValue = 1;
+        System.out.println("删除结点：" + delValue);
+        tree.delNode(delValue);
 
         System.out.println("中序遍历：");
         tree.infixOrder();
@@ -90,12 +91,37 @@ public class BinarySortTreeDemo {
 
             Node parentNode = this.searchParent(value);
 
-            // 如果删除的结点是叶子结点
+            // 删除叶子结点（直接删除）
             if (targetNode.left == null && targetNode.right == null) {
+                // 判断targetNode是parentNode的左子结点还是右子结点
                 if (parentNode.left != null && parentNode.left.value == value) {
                     parentNode.left = null;
                 } else if (parentNode.right != null && parentNode.right.value == value) {
                     parentNode.right = null;
+                }
+            }
+            // 删除有2颗子树的结点
+            else if (targetNode.left != null && targetNode.right != null) {
+            }
+            // 删除有1颗子树的结点(让儿子结点顶替被删除的结点)
+            else {
+                // 如果要删除的结点有左子结点
+                if (targetNode.left != null) {
+                    // 判断targetNode是parentNode的左子结点还是右子结点
+                    if (parentNode.left != null && parentNode.left.value == value) {
+                        parentNode.left = targetNode.left;
+                    } else if (parentNode.right != null && parentNode.right.value == value) {
+                        parentNode.right = targetNode.left;
+                    }
+                }
+                // 如果要删除的结点有右子结点
+                else {
+                    // 判断targetNode是parentNode的左子结点还是右子结点
+                    if (parentNode.left != null && parentNode.left.value == value) {
+                        parentNode.left = targetNode.right;
+                    } else if (parentNode.right != null && parentNode.right.value == value) {
+                        parentNode.right = targetNode.right;
+                    }
                 }
             }
         }
