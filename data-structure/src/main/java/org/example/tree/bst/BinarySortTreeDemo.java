@@ -1,7 +1,7 @@
 package org.example.tree.bst;
 
 /**
- * @Title:
+ * @Title: 二叉排序树
  * @Author: cmy
  * @Date: 2021/2/13 17:21
  */
@@ -19,7 +19,7 @@ public class BinarySortTreeDemo {
         System.out.println("中序遍历：");
         tree.infixOrder();
 
-        int delValue = 1;
+        int delValue = 10;
         System.out.println("删除结点：" + delValue);
         tree.delNode(delValue);
 
@@ -102,6 +102,11 @@ public class BinarySortTreeDemo {
             }
             // 删除有2颗子树的结点
             else if (targetNode.left != null && targetNode.right != null) {
+                // 2种方法任选其一
+                // 1、删除目标结点的右子树的最小结点，并把最小值替换到目标结点
+                targetNode.value = delTreeMinNode(targetNode.right);
+                // // 2、删除目标结点的左子树的最大结点，并把最大值替换到目标结点
+                // targetNode.value = delTreeMaxNode(targetNode.left);
             }
             // 删除有1颗子树的结点(让儿子结点顶替被删除的结点)
             else {
@@ -124,6 +129,46 @@ public class BinarySortTreeDemo {
                     }
                 }
             }
+        }
+
+        /**
+         * 删除目标结点的子树中的最小结点
+         *
+         * @param node 目标结点
+         * @return 最小结点的值
+         */
+        public int delTreeMinNode(Node node) {
+            Node target = node;
+
+            // 找到最小结点
+            while (target.left != null) {
+                target = target.left;
+            }
+
+            // 删除最小结点
+            delNode(target.value);
+
+            return target.value;
+        }
+
+        /**
+         * 删除目标结点的子树中的最大结点
+         *
+         * @param node 目标结点
+         * @return 最大结点的值
+         */
+        public int delTreeMaxNode(Node node) {
+            Node target = node;
+
+            // 找到最大结点
+            while (target.right != null) {
+                target = target.right;
+            }
+
+            // 删除最大结点
+            delNode(target.value);
+
+            return target.value;
         }
     }
 
