@@ -19,9 +19,15 @@ public class BinarySortTreeDemo {
         System.out.println("中序遍历：");
         tree.infixOrder();
 
-        int delValue = 10;
-        System.out.println("删除结点：" + delValue);
-        tree.delNode(delValue);
+        System.out.println("删除结点");
+        tree.delNode(3);
+        tree.delNode(7);
+        tree.delNode(5);
+        tree.delNode(10);
+        tree.delNode(9);
+        tree.delNode(2);
+        tree.delNode(1);
+        tree.delNode(12);
 
         System.out.println("中序遍历：");
         tree.infixOrder();
@@ -112,20 +118,31 @@ public class BinarySortTreeDemo {
             else {
                 // 如果要删除的结点有左子结点
                 if (targetNode.left != null) {
-                    // 判断targetNode是parentNode的左子结点还是右子结点
-                    if (parentNode.left != null && parentNode.left.value == value) {
-                        parentNode.left = targetNode.left;
-                    } else if (parentNode.right != null && parentNode.right.value == value) {
-                        parentNode.right = targetNode.left;
+                    if (parentNode != null) {
+                        // 判断targetNode是parentNode的左子结点还是右子结点
+                        if (parentNode.left != null && parentNode.left.value == value) {
+                            parentNode.left = targetNode.left;
+                        } else if (parentNode.right != null && parentNode.right.value == value) {
+                            parentNode.right = targetNode.left;
+                        }
+                    }
+                    // 如果parentNode为空，说明targetNode为根节点
+                    else {
+                        // 直接让根节点指向子结点即完成删除操作
+                        root = targetNode.left;
                     }
                 }
                 // 如果要删除的结点有右子结点
                 else {
-                    // 判断targetNode是parentNode的左子结点还是右子结点
-                    if (parentNode.left != null && parentNode.left.value == value) {
-                        parentNode.left = targetNode.right;
-                    } else if (parentNode.right != null && parentNode.right.value == value) {
-                        parentNode.right = targetNode.right;
+                    if (parentNode != null) {
+                        // 判断targetNode是parentNode的左子结点还是右子结点
+                        if (parentNode.left != null && parentNode.left.value == value) {
+                            parentNode.left = targetNode.right;
+                        } else if (parentNode.right != null && parentNode.right.value == value) {
+                            parentNode.right = targetNode.right;
+                        }
+                    } else {
+                        root = targetNode.right;
                     }
                 }
             }
